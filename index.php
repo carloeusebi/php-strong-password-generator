@@ -9,15 +9,19 @@ if (isset($_GET['reset'])) {
   header('Location: index.php');
   exit();
 }
+echo '<pre>';
+var_dump($_GET);
+echo '</pre>';
 
 $errors = [];
 
 $pwd_length = $_GET['pwd_length'] ?? NULL;
 $allow_char_repetition = $_GET['allow_char_repetition'] ?? true;
+$allowed_chars = $_GET['allowed_chars'] ?? [];
 
 if ($pwd_length) {
   if ($pwd_length >= 8 && $pwd_length <= 52) {
-    $_SESSION['password'] = generate_password($pwd_length, $allow_char_repetition);
+    $_SESSION['password'] = generate_password($pwd_length, $allow_char_repetition, $allowed_chars);
     header("Location: $RESULT_FILE");
   } else {
     $errors['invalid-length'] = 'Password length should be a value between 8 and 52';
@@ -58,9 +62,23 @@ if ($pwd_length) {
           <label for="allow_char_repetition_yes">YES</label>
         </div>
         <div>
-          <input type="radio" name="allow_char_repetition" id="allow_char_repetition_no" value="0" <?= $allow_char_repetition ? '' : 'checked' ?>>
-          <label for="allow_char_repetition_no">NO</label>
         </div>
+      </div>
+      <div class="mb-3">
+        <div>What characters to include:</div>
+        <div>
+          <input type="checkbox" id="letters" name="allowed_chars[]" value="letters">
+          <label for="letters">Letters</label>
+        </div>
+        <div>
+          <input type="checkbox" id="numbers" name="allowed_chars[]" value="numbers">
+          <label for="numbers">Numbers</label>
+        </div>
+        <div>
+          <input type="checkbox" id="symbols" name="allowed_chars[]" value="symbols">
+          <label for="symbols">Symbols</label>
+        </div>
+
       </div>
       <!-- SUBMIT BUTTON -->
       <div>
