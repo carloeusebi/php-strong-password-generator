@@ -1,28 +1,27 @@
 <?php
 
+session_start();
 require_once __DIR__ . '/functions.php';
 
-if (isset($_GET['reset'])) {
-  unset($_GET);
-}
+$RESULT_FILE = 'result_page.php';
+
 
 $pwd_length = $_GET['pwd_length'] ?? NULL;
 
 if ($pwd_length >= 8) {
-  $password = generate_password($pwd_length);
+  $_SESSION['password'] = generate_password($pwd_length);
+  header("Location: $RESULT_FILE");
+} else {
+  //todo 
 }
+
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css' integrity='sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==' crossorigin='anonymous' />
-</head>
+<?php include __DIR__ . '/includes/layouts/head.php' ?>
 
 <body>
   <div class="container mt-5">
@@ -35,14 +34,8 @@ if ($pwd_length >= 8) {
       <!-- SUBMIT BUTTON -->
       <div>
         <button class="btn btn-primary" type="submit">Generate</button>
-        <button class="btn btn-secondary" type="submit" name="reset">Reset</button>
-
       </div>
     </form>
-    <?php if (isset($password)) : ?>
-      <h2>Your generated password is:</h2>
-      <div class="h2"><?= $password ?></div>
-    <?php endif ?>
   </div>
 </body>
 
