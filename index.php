@@ -1,5 +1,17 @@
 <?php
-$hello = 'hello world';
+
+require_once __DIR__ . '/functions.php';
+
+if (isset($_GET['reset'])) {
+  unset($_GET);
+}
+
+$pwd_length = $_GET['pwd_length'] ?? NULL;
+
+if ($pwd_length >= 8) {
+  $password = generate_password($pwd_length);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -14,17 +26,23 @@ $hello = 'hello world';
 
 <body>
   <div class="container mt-5">
-    <form action="" method="GET">
+    <form action="" method="GET" class="mb-5">
       <!-- PWD LENGTH -->
       <div>
-        <label for="pwd_length">Desired length of password (8-26):</label>
-        <input type="num" id="pwd_length" name="pwd_length" value="<?= $pwd_length ?? 8 ?>">
+        <label for="pwd_length">Desired length of password (min 8):</label>
+        <input type="number" id="pwd_length" name="pwd_length" min="8" value="<?= $pwd_length ?? 8 ?>">
       </div>
       <!-- SUBMIT BUTTON -->
       <div>
         <button class="btn btn-primary" type="submit">Generate</button>
+        <button class="btn btn-secondary" type="submit" name="reset">Reset</button>
+
       </div>
     </form>
+    <?php if (isset($password)) : ?>
+      <h2>Your generated password is:</h2>
+      <div class="h2"><?= $password ?></div>
+    <?php endif ?>
   </div>
 </body>
 

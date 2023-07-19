@@ -2,7 +2,7 @@
 
 function generate_password(int $pwd_length = 8): string
 {
-  $RANDOM_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_@#[]`#!"£$%&/()=';
+  $RANDOM_CHARS = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_@[]`#!"$%&/()=';
 
   $chars = str_split($RANDOM_CHARS);
 
