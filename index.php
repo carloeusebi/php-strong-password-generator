@@ -5,6 +5,11 @@ require_once __DIR__ . '/functions.php';
 
 $RESULT_FILE = 'result_page.php';
 
+if (isset($_GET['reset'])) {
+  header('Location: index.php');
+  exit();
+}
+
 $errors = [];
 
 $pwd_length = $_GET['pwd_length'] ?? NULL;
@@ -62,6 +67,7 @@ if ($pwd_length) {
       <!-- SUBMIT BUTTON -->
       <div>
         <button class="btn btn-primary" type="submit">Generate</button>
+        <button class="btn btn-secondary" type="submit" name="reset">Reset</button>
       </div>
     </form>
   </div>
