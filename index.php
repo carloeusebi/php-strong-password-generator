@@ -9,9 +9,6 @@ if (isset($_GET['reset'])) {
   header('Location: index.php');
   exit();
 }
-echo '<pre>';
-var_dump($_GET);
-echo '</pre>';
 
 $errors = [];
 
@@ -20,11 +17,15 @@ $allow_char_repetition = $_GET['allow_char_repetition'] ?? true;
 $allowed_chars = $_GET['allowed_chars'] ?? [];
 
 if ($pwd_length) {
-  if ($pwd_length >= 8 && $pwd_length <= 52) {
-    $_SESSION['password'] = generate_password($pwd_length, $allow_char_repetition, $allowed_chars);
+  $password = generate_password($pwd_length, $allow_char_repetition, $allowed_chars);
+
+  if (!$password) {
+    $errors['not-enough-characters'] = 'There are not enough character to reach the desired password length! Try to allow characters repetition or allow more character types!';
+  }
+
+  if (empty($errors)) {
+    $_SESSION['password'] = $password;
     header("Location: $RESULT_FILE");
-  } else {
-    $errors['invalid-length'] = 'Password length should be a value between 8 and 52';
   }
 }
 ?>
@@ -55,27 +56,35 @@ if ($pwd_length) {
         <label for="pwd_length">Desired length of password (min 8; max 52):</label>
         <input type="number" id="pwd_length" name="pwd_length" min="8" max="52" value="<?= $pwd_length ?? 8 ?>">
       </div>
+      <!-- RADIOS -->
       <div class="mb-3">
         <div>
           <div>Allow characters repetition</div>
-          <input type="radio" name="allow_char_repetition" id="allow_char_repetition_yes" value="1" <?= $allow_char_repetition ? 'checked' : '' ?>>
-          <label for="allow_char_repetition_yes">YES</label>
+          <div>
+            <input type="radio" name="allow_char_repetition" id="allow_char_repetition_yes" value="1" <?= $allow_char_repetition ? 'checked' : '' ?>>
+            <label for="allow_char_repetition_yes">YES</label>
+          </div>
+          <div>
+            <input type="radio" name="allow_char_repetition" id="allow_char_repetition_no" value="0" <?= $allow_char_repetition ? '' : 'checked' ?>>
+            <label for="allow_char_repetition_no">NO</label>
+          </div>
         </div>
         <div>
         </div>
       </div>
+      <!-- CHECKBOXES -->
       <div class="mb-3">
         <div>What characters to include:</div>
         <div>
-          <input type="checkbox" id="letters" name="allowed_chars[]" value="letters">
+          <input type="checkbox" id="letters" name="allowed_chars[letters]" value="letters" <?= isset($_GET['allowed_chars']['letters']) ? 'checked' : '' ?>>
           <label for="letters">Letters</label>
         </div>
         <div>
-          <input type="checkbox" id="numbers" name="allowed_chars[]" value="numbers">
+          <input type="checkbox" id="numbers" name="allowed_chars[numbers]" value="numbers" <?= isset($_GET['allowed_chars']['numbers']) ? 'checked' : '' ?>>
           <label for="numbers">Numbers</label>
         </div>
         <div>
-          <input type="checkbox" id="symbols" name="allowed_chars[]" value="symbols">
+          <input type="checkbox" id="symbols" name="allowed_chars[symbols]" value="symbols" <?= isset($_GET['allowed_chars']['symbols']) ? 'checked' : '' ?>>
           <label for="symbols">Symbols</label>
         </div>
 
