@@ -13,18 +13,16 @@ if (isset($_GET['reset'])) {
 $errors = [];
 
 $pwd_length = $_GET['pwd_length'] ?? NULL;
-$allow_char_repeat = $_GET['allow_char_repeat'] ?? true;
+$allow_char_repetition = $_GET['allow_char_repetition'] ?? true;
 
 if ($pwd_length) {
   if ($pwd_length >= 8 && $pwd_length <= 52) {
-    $_SESSION['password'] = generate_password($pwd_length);
+    $_SESSION['password'] = generate_password($pwd_length, $allow_char_repetition);
     header("Location: $RESULT_FILE");
   } else {
     $errors['invalid-length'] = 'Password length should be a value between 8 and 52';
   }
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -56,12 +54,12 @@ if ($pwd_length) {
       <div class="mb-3">
         <div>
           <div>Allow characters repetition</div>
-          <input type="radio" name="allow_char_repeat" id="allow_char_repeat_yes" value="1" <?= $allow_char_repeat ? 'checked' : '' ?>>
-          <label for="allow_char_repeat_yes">YES</label>
+          <input type="radio" name="allow_char_repetition" id="allow_char_repetition_yes" value="1" <?= $allow_char_repetition ? 'checked' : '' ?>>
+          <label for="allow_char_repetition_yes">YES</label>
         </div>
         <div>
-          <input type="radio" name="allow_char_repeat" id="allow_char_repeat_no" value="0" <?= $allow_char_repeat ? '' : 'checked' ?>>
-          <label for="allow_char_repeat_no">NO</label>
+          <input type="radio" name="allow_char_repetition" id="allow_char_repetition_no" value="0" <?= $allow_char_repetition ? '' : 'checked' ?>>
+          <label for="allow_char_repetition_no">NO</label>
         </div>
       </div>
       <!-- SUBMIT BUTTON -->
