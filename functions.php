@@ -2,7 +2,8 @@
 
 
 /**
- * @return password returns NULL if there are not enough characters to generate a password based on the characters requirements
+ * @param array $allowed_chars must be an array with values only 'letters' | 'numbers' | 'symbols', if has other values the function will return NULL
+ * @return string|NULL returns NULL if there are not enough characters to generate a password based on the characters requirements
  */
 function generate_password(int $pwd_length = 8, bool $allow_repetition = true, array $allowed_chars = []): string|NULL
 {
@@ -17,6 +18,7 @@ function generate_password(int $pwd_length = 8, bool $allow_repetition = true, a
     $chars = $letters . $numbers . $symbols;
   } else {
     foreach ($allowed_chars as $allowed_char) {
+      if ($allowed_char !== 'letters' && $allowed_char !== 'numbers' && $allowed_char !== 'symbols') continue;
       $chars .= $$allowed_char;
     }
   }
